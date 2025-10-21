@@ -21,7 +21,8 @@
     v-show="!gatewayStore.isProgrammableGateway"
     class="h-full"
   >
-    <ResourceSettingTopBar
+    <TopBar
+      :gateway-id="gatewayId"
       :current-source="curResource"
       :is-detail="!isCollapsed"
       :latest="versionConfigs.needNewVersion"
@@ -413,7 +414,7 @@ import AgDropdown from '@/components/ag-dropdown/Index.vue';
 import PluginManage from '@/components/plugin-manage/Index.vue';
 import ResourceDocViewer from './components/ResourceDocViewer.vue';
 import AgTable from '@/components/ag-table/Index.vue';
-import ResourceSettingTopBar from './components/TopBar.vue';
+import TopBar from './components/TopBar.vue';
 import PageNotFound from '@/views/404.vue';
 // import mitt from '@/common/event-bus';
 import {
