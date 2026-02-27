@@ -235,7 +235,7 @@ import {
   getGatewaysDetailsDocs,
 } from '@/services/source/docs';
 import {
-  getComponenSystemDetail,
+  getComponentSystemDetail,
   getComponentSystemList,
   getESBSDKDetail,
   getSystemAPIList,
@@ -375,7 +375,7 @@ const fetchTargetBasics = async () => {
       sdks.value = sdksResponse;
     }
     else if (curTab.value === 'component') {
-      curTargetBasics.value = await getComponenSystemDetail(board.value, curTargetName.value);
+      curTargetBasics.value = await getComponentSystemDetail(board.value, curTargetName.value);
     }
   }
   catch {
@@ -920,21 +920,21 @@ onBeforeMount(() => {
         .res-item-desc {
           display: -webkit-box;
           overflow: hidden;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 1;
           font-size: 12px;
           line-height: 20px;
           color: #979ba5;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
         }
 
         .res-item-name {
           display: block;
           overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
           font-size: 14px;
           line-height: 22px;
           color: #313238;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         &:hover,

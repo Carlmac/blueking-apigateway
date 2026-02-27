@@ -468,6 +468,7 @@ const handleShowDetail = async (data: ITimeChartResponse) => {
       start: startTime.value,
       end: endTime.value,
     });
+    console.log(res);
     errorRequests.value = res.data.data_list.map((item) => {
       const datetime = moment(item.timestamp).format('MM-DD HH:mm');
       const endTime = moment(item.req_end_time).valueOf();

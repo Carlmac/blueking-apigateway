@@ -16,6 +16,16 @@
  * to the current version of the project delivered to anyone in the future.
  */
 import http from '../http';
+import type {
+  IStageBackendListOutput,
+  IStageListOutput,
+  IStageRetrieveOutput,
+  IStageVarsOutput,
+} from '@/services/types/responses/gateways.ts';
+import type {
+  IGatewaysStagesBackendsListQuery,
+  IGatewaysStagesListQuery,
+} from '@/services/types/query/gateways.ts';
 
 const path = '/gateways';
 
@@ -42,10 +52,11 @@ export interface IStageListItem {
   new_resource_version: string
 }
 
-export const getStageList = (apigwId: number) => http.get<IStageListItem[]>(`${path}/${apigwId}/stages/`);
+export const getStageList = (apigwId: number, query: IGatewaysStagesListQuery = {}) =>
+  http.get<IStageListOutput[]>(`${path}/${apigwId}/stages/`, query);
 
 export const getStageDetail = (apigwId: number, stageId: number) =>
-  http.get<IStageListItem>(`${path}/${apigwId}/stages/${stageId}/`);
+  http.get<IStageRetrieveOutput>(`${path}/${apigwId}/stages/${stageId}/`);
 
 export const createStage = (apigwId: number, data: any) => http.post(`${path}/${apigwId}/stages/`, data);
 
@@ -58,9 +69,13 @@ export const putStage = (apigwId: number, stageId: number, data: any) =>
 export const toggleStatus = (apigwId: number, stageId: number, param: { status: number }) =>
   http.put(`${path}/${apigwId}/stages/${stageId}/status/`, param);
 
-export const getStageBackends = (apigwId: number, stageId: number) =>
-  http.get(`${path}/${apigwId}/stages/${stageId}/backends/`);
+export const getStageBackends = (
+  apigwId: number,
+  stageId: number,
+  query: IGatewaysStagesBackendsListQuery = {},
+) =>
+  http.get<IStageBackendListOutput>(`${path}/${apigwId}/stages/${stageId}/backends/`, query);
 
-export const getStageVars = (apigwId: number, stageId: number) => http.get(`${path}/${apigwId}/stages/${stageId}/vars/`);
+export const getStageVars = (apigwId: number, stageId: number) => http.get<IStageVarsOutput>(`${path}/${apigwId}/stages/${stageId}/vars/`);
 
 export const putStageVars = (apigwId: number, stageId: number, data: any) => http.put(`${path}/${apigwId}/stages/${stageId}/vars/`, data);

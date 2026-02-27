@@ -16,6 +16,21 @@
  * to the current version of the project delivered to anyone in the future.
  */
 import http from '../http';
+import type { ICountAndResults } from '@/services/types/utils.ts';
+import type {
+  IAppPermissionApplyListOutput,
+  IAppPermissionApplyRetrieveOutput,
+  IAppPermissionListOutput,
+  IAppPermissionRecordListOutput,
+  IResourceListPageOutput,
+} from '@/services/types/responses/gateways.ts';
+import type {
+  IGatewaysPermissionsAppPermissionApplyListQuery,
+  IGatewaysPermissionsAppPermissionRecordsListQuery,
+  IGatewaysPermissionsAppPermissionsBkAppCodesListQuery,
+  IGatewaysPermissionsAppPermissionsListQuery,
+  IGatewaysResourcesListQuery,
+} from '@/services/types/query/gateways.ts';
 
 export interface IBatchUpdateParams {
   resource_dimension_ids: number[]
@@ -77,13 +92,8 @@ export interface IResourceData {
  * @param apigwId 网关id
  * @param params
  */
-export function getApigwResources(apigwId: number, params: {
-  no_page?: boolean
-  order_by?: string
-  offset: number
-  limit: number
-}) {
-  return http.get(`/gateways/${apigwId}/resources/`, params);
+export function getApigwResources(apigwId: number, params: IGatewaysResourcesListQuery = {}) {
+  return http.get<ICountAndResults<IResourceListPageOutput>>(`/gateways/${apigwId}/resources/`, params);
 }
 
 /**
@@ -91,23 +101,17 @@ export function getApigwResources(apigwId: number, params: {
  * @param apigwId 网关id
  * @param params
  */
-export function getPermissionApplyList(apigwId: number, params: {
-  limit: number
-  offset: number
-  bk_app_code?: string
-  applied_by?: string
-  grant_dimension?: string
-} = {
+export function getPermissionApplyList(apigwId: number, params: IGatewaysPermissionsAppPermissionApplyListQuery = {
   offset: 0,
   limit: 10,
 }) {
-  return http.get(`/gateways/${apigwId}/permissions/app-permission-apply/`, params);
+  return http.get<ICountAndResults<IAppPermissionApplyListOutput>>(`/gateways/${apigwId}/permissions/app-permission-apply/`, params);
 }
 
 /**
  *  审批操作
  * @param apigwId 网关id
- * @param data 审批参数
+ * @param params
  */
 export function updatePermissionStatus(
   apigwId: number,
@@ -126,7 +130,7 @@ export function updatePermissionStatus(
  * @param id
  */
 export function getPermissionApplyDetail(apigwId: number, id: number) {
-  return http.get(`/gateways/${apigwId}/permissions/app-permission-apply/${id}/`);
+  return http.get<IAppPermissionApplyRetrieveOutput>(`/gateways/${apigwId}/permissions/app-permission-apply/${id}/`);
 }
 
 /**
@@ -136,15 +140,12 @@ export function getPermissionApplyDetail(apigwId: number, id: number) {
  */
 export function getPermissionRecordList(
   apigwId: number,
-  params: {
-    offset: number
-    limit: number
-  } = {
+  params: IGatewaysPermissionsAppPermissionRecordsListQuery = {
     offset: 0,
     limit: 10,
   },
 ) {
-  return http.get(`/gateways/${apigwId}/permissions/app-permission-records/`, params);
+  return http.get<ICountAndResults<IAppPermissionRecordListOutput>>(`/gateways/${apigwId}/permissions/app-permission-records/`, params);
 }
 
 /**
@@ -170,8 +171,8 @@ export function deleteApiPermission(apigwId: number, params: { ids: number[] }) 
  * @param apigwId 网关id
  * @param params 查询参数
  */
-export function getPermissionList(apigwId: number, params: IFilterParams) {
-  return http.get(`/gateways/${apigwId}/permissions/app-permissions/`, params);
+export function getPermissionList(apigwId: number, params: IGatewaysPermissionsAppPermissionsListQuery = {}) {
+  return http.get<ICountAndResults<IAppPermissionListOutput>>(`/gateways/${apigwId}/permissions/app-permissions/`, params);
 }
 
 /**
@@ -187,8 +188,11 @@ export function authResourcePermission(apigwId: number, params: IAuthData) {
  *  获取有资源权限的应用列表
  * @param apigwId 网关id
  */
-export function getResourcePermissionAppList(apigwId: number) {
-  return http.get(`/gateways/${apigwId}/permissions/app-permissions/bk-app-codes/`);
+export function getResourcePermissionAppList(
+  apigwId: number,
+  query: IGatewaysPermissionsAppPermissionsBkAppCodesListQuery = {},
+) {
+  return http.get<string[]>(`/gateways/${apigwId}/permissions/app-permissions/bk-app-codes/`, query);
 }
 
 /**
@@ -205,14 +209,8 @@ export function deleteResourcePermission(apigwId: number, params: { ids: number[
  * @param apigwId 网关id
  * @returns
  */
-export function getResourceListData(apigwId: number, params: {
-  limit: number
-  order_by: string
-}) {
-  return http.get<{
-    count: number
-    results: IResourceData[]
-  }>(`/gateways/${apigwId}/resources/`, params);
+export function getResourceListData(apigwId: number, params: IGatewaysResourcesListQuery = {}) {
+  return http.get<ICountAndResults<IResourceListPageOutput>>(`/gateways/${apigwId}/resources/`, params);
 }
 
 /**

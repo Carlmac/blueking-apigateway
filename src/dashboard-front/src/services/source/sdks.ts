@@ -17,10 +17,16 @@
  */
 
 import http from '../http';
+import type { ICountAndResults } from '@/services/types/utils.ts';
+import type { IGatewaySDKListOutput } from '@/services/types/responses/gateways.ts';
+import type { IDocsSdksDocReadResponse } from '@/services/types/responses/docs.ts';
+import type { IDocsSdksDocReadQuery } from '@/services/types/query/docs.ts';
+import type { IGatewaysSdksListQuery } from '@/services/types/query/gateways.ts';
 
 const path = '/gateways';
 
-export const getSDKList = (apigwId: number, data: any) => http.get(`${path}/${apigwId}/sdks/`, data);
+export const getSDKList = (apigwId: number, data: IGatewaysSdksListQuery = {}) =>
+  http.get<ICountAndResults<IGatewaySDKListOutput>>(`${path}/${apigwId}/sdks/`, data);
 
 export const createSDK = (apigwId: number, data: any) => http.post(`${path}/${apigwId}/sdks/`, data);
 
@@ -28,4 +34,5 @@ export const createSDK = (apigwId: number, data: any) => http.post(`${path}/${ap
  *  获取指定语言（python）的网关 SDK 说明文档
  * @param data 查询参数
  */
-export const getGatewaySDKDoc = (data: any) => http.get('/docs/sdks/doc/', data);
+export const getGatewaySDKDoc = (data: IDocsSdksDocReadQuery) =>
+  http.get<IDocsSdksDocReadResponse>('/docs/sdks/doc/', data);

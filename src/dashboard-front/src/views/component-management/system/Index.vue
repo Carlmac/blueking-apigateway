@@ -437,11 +437,11 @@ const setDelay = (duration: number) => {
 }
 
 :deep(.official) {
-  margin-left: 2px;
   padding: 2px;
-  background: #dcffe2;
+  margin-left: 2px;
   font-size: 12px;
   color: #2dcb56;
+  background: #dcffe2;
 }
 
 code {
@@ -449,9 +449,9 @@ code {
   padding-top: 0.2em;
   padding-bottom: 0.2em;
   margin: 0;
-  color: #c7254e;
   font-size: 85%;
-  background-color: rgba(0, 0, 0, 0.04);
+  color: #c7254e;
+  background-color: rgb(0 0 0 / 4%);
   border-radius: 3px;
 }
 
@@ -459,9 +459,9 @@ code {
   position: relative;
 
   &::after {
-    content: '*';
     margin-left: 2px;
     color: #ea3636;
+    content: '*';
   }
 }
 </style>
@@ -472,9 +472,9 @@ code {
   padding-top: 0.2em;
   padding-bottom: 0.2em;
   margin: 0;
-  color: #c7254e;
   font-size: 85%;
-  background-color: rgba(0, 0, 0, 0.04);
+  color: #c7254e;
+  background-color: rgb(0 0 0 / 4%);
   border-radius: 3px;
 }
 

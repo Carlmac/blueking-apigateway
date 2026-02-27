@@ -16,6 +16,12 @@
  * to the current version of the project delivered to anyone in the future.
  */
 import http from '../http';
+import type { ICountAndResults } from '@/services/types/utils.ts';
+import type {
+  IBackendListOutput,
+  IBackendRetrieveOutput,
+} from '@/services/types/responses/gateways.ts';
+import type { IGatewaysBackendsListQuery } from '@/services/types/query/gateways.ts';
 
 export interface IBackendServicesConfig {
   name: string
@@ -68,16 +74,8 @@ export interface IHealthCheck {
   }
 }
 
-export function getBackendServiceList(apigwId: number, params?: {
-  limit?: number
-  offset?: number
-  name?: string
-  type?: string
-}) {
-  return http.get<{
-    count: number
-    results: any[]
-  }>(`/gateways/${apigwId}/backends/`, params);
+export function getBackendServiceList(apigwId: number, params: IGatewaysBackendsListQuery = {}) {
+  return http.get<ICountAndResults<IBackendListOutput>>(`/gateways/${apigwId}/backends/`, params);
 }
 
 /**
@@ -86,26 +84,7 @@ export function getBackendServiceList(apigwId: number, params?: {
  * @param id 后端服务id
  */
 export function getBackendServiceDetail(apigwId: number, id: number) {
-  return http.get<{
-    configs: {
-      checks?: IHealthCheck
-      hosts: {
-        scheme: string
-        host: string
-        weight: number
-      }[]
-      loadbalance: string
-      stage: {
-        id: number
-        name: string
-      }
-      timeout: number
-      type: string
-    }[]
-    description: string
-    id: number
-    name: string
-  }>(`/gateways/${apigwId}/backends/${id}/`);
+  return http.get<IBackendRetrieveOutput>(`/gateways/${apigwId}/backends/${id}/`);
 }
 
 /**

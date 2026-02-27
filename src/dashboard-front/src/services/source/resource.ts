@@ -18,6 +18,26 @@
 
 import http from '../http';
 import { blobDownLoad } from '@/utils';
+import type { ICountAndResults } from '@/services/types/utils.ts';
+import type {
+  IBackendPathCheckOutput,
+  IDocListOutput,
+  IResourceListPageOutput,
+  IResourceRetrieveOutput,
+  IResourceVersionDiffOutput,
+  IResourceVersionListOutput,
+  IResourceVersionRetrieveOutput,
+  IResourceWithVerifiedUserRequiredOutput,
+} from '@/services/types/responses/gateways.ts';
+import type {
+  IGatewaysResourceVersionsDiffReadQuery,
+  IGatewaysResourceVersionsListQuery,
+  IGatewaysResourceVersionsReadQuery,
+  IGatewaysResourcesBackendPathCheckReadQuery,
+  IGatewaysResourcesDocsListQuery,
+  IGatewaysResourcesListQuery,
+  IGatewaysResourcesWithVerifiedUserRequiredListQuery,
+} from '@/services/types/query/gateways.ts';
 
 const path = '/gateways';
 
@@ -50,7 +70,8 @@ export interface IDiffData {
  * @param params
  * @returns
  */
-export const getResourceList = (apigwId: number, params: any) => http.get(`${path}/${apigwId}/resources/`, params);
+export const getResourceList = (apigwId: number, params: IGatewaysResourcesListQuery = {}) =>
+  http.get<ICountAndResults<IResourceListPageOutput>>(`${path}/${apigwId}/resources/`, params);
 
 /**
  *  获取资源详情
@@ -59,7 +80,7 @@ export const getResourceList = (apigwId: number, params: any) => http.get(`${pat
  * @returns
  */
 export const getResourceDetail = (apigwId: number, resourceId: number) =>
-  http.get(`${path}/${apigwId}/resources/${resourceId}/`);
+  http.get<IResourceRetrieveOutput>(`${path}/${apigwId}/resources/${resourceId}/`);
 
 /**
  *  创建资源
@@ -163,33 +184,28 @@ export const createResourceVersion = (apigwId: number, data: any) =>
  * 获取建议的版本
  * @param apigwId 网关id
  */
-export const getNextVersion = (apigwId: number) => http.get(`${path}/${apigwId}/resource-versions/next-version/`);
+export const getNextVersion = (apigwId: number) =>
+  http.get<{ version: string }>(`${path}/${apigwId}/resource-versions/next-version/`);
 
-export const getVersionList = (apigwId: number, params: {
-  limit?: number
-  offset?: number
-}) =>
-  http.get<{
-    count: number
-    results: IVersionItem[]
-  }>(`${path}/${apigwId}/resource-versions/`, params);
+export const getVersionList = (apigwId: number, params: IGatewaysResourceVersionsListQuery = {}) =>
+  http.get<ICountAndResults<IResourceVersionListOutput>>(`${path}/${apigwId}/resource-versions/`, params);
 
 // 资源版本详情
-export const getVersionDetail = (apigwId: number, id: number, params?: any) =>
-  http.get(`${path}/${apigwId}/resource-versions/${id}/`, params);
+export const getVersionDetail = (apigwId: number, id: number, params: IGatewaysResourceVersionsReadQuery = {}) =>
+  http.get<IResourceVersionRetrieveOutput>(`${path}/${apigwId}/resource-versions/${id}/`, params);
 
 /**
  * 是否需要创建新资源版本
  * @param apigwId 网关id
  */
 export const checkNeedNewVersion = (apigwId: number) =>
-  http.get(`${path}/${apigwId}/resource-versions/need-new-version/`, undefined, { catchError: true });
+  http.get<{
+    msg: string | null
+    need_new_version: boolean
+  }>(`${path}/${apigwId}/resource-versions/need-new-version/`, undefined, { catchError: true });
 
-export const getVersionDiff = (apigwId: number, data: {
-  source_resource_version_id: number
-  target_resource_version_id: number
-}) =>
-  http.get<IDiffData>(`${path}/${apigwId}/resource-versions/diff/`, data);
+export const getVersionDiff = (apigwId: number, data: IGatewaysResourceVersionsDiffReadQuery) =>
+  http.get<IResourceVersionDiffOutput>(`${path}/${apigwId}/resource-versions/diff/`, data);
 
 export const exportVersion = async (apigwId: number, data: {
   id?: number
@@ -210,21 +226,15 @@ export const exportVersion = async (apigwId: number, data: {
  * @param apigwId 网关id
  * @param params 参数
  */
-export const getVerifiedUserRequiredResources = (apigwId: number, params?: {
-  limit?: number
-  offset?: number
-}) =>
-  http.get(`${path}/${apigwId}/resources/with/verified-user-required/`, params);
+export const getVerifiedUserRequiredResources = (
+  apigwId: number,
+  params: IGatewaysResourcesWithVerifiedUserRequiredListQuery = {},
+) =>
+  http.get<IResourceWithVerifiedUserRequiredOutput[]>(`${path}/${apigwId}/resources/with/verified-user-required/`, params);
 
 // 校验资源后端地址
-export const backendsPathCheck = (apigwId: number, data: any) =>
-  http.get<Array<{
-    backend_urls: string[]
-    stage: {
-      id: number
-      name: string
-    }
-  }>>(`${path}/${apigwId}/resources/backend-path/check/`, data);
+export const backendsPathCheck = (apigwId: number, data: IGatewaysResourcesBackendPathCheckReadQuery) =>
+  http.get<IBackendPathCheckOutput[]>(`${path}/${apigwId}/resources/backend-path/check/`, data);
 
 /**
  * 设置标签
@@ -240,8 +250,8 @@ export const updateResourceLabels = (apigwId: number, resourceId: number, data: 
  * @param apigwId 网关id
  * @param resourceId 资源id
  */
-export const getResourceDocs = (apigwId: number, resourceId: number) =>
-  http.get(`${path}/${apigwId}/resources/${resourceId}/docs/`);
+export const getResourceDocs = (apigwId: number, resourceId: number, query: IGatewaysResourcesDocsListQuery = {}) =>
+  http.get<IDocListOutput[]>(`${path}/${apigwId}/resources/${resourceId}/docs/`, query);
 
 /**
  * 获取资源文档预览数据

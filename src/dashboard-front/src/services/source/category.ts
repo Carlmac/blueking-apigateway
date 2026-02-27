@@ -16,8 +16,13 @@
  * to the current version of the project delivered to anyone in the future.
  */
 import http from '../http';
+import type {
+  IDocCategoryDetailResponse,
+  IDocCategoryListResponse,
+} from '@/services/types/responses/esb.ts';
+import type { IEsbDocCategoriesListQuery } from '@/services/types/query/esb.ts';
 
-const path = '/esb/doc-categories/';
+const path = '/esb/doc-categories';
 
 export interface ICategoryItem {
   id?: number
@@ -27,11 +32,12 @@ export interface ICategoryItem {
   updated_time: string
   system_count: number
 }
+
 /**
  *  获取文档列表
  */
-export function getDocCategory() {
-  return http.get(`${path}`);
+export function getDocCategory(query: IEsbDocCategoriesListQuery = {}) {
+  return http.get<IDocCategoryListResponse>(`${path}/`, query);
 }
 
 /**
@@ -39,7 +45,7 @@ export function getDocCategory() {
  * @param id 文档id
  */
 export function getDocCategoryDetail(id: number) {
-  return http.get(`${path}${id}/`);
+  return http.get<IDocCategoryDetailResponse>(`${path}/${id}/`);
 }
 
 /**
@@ -47,7 +53,7 @@ export function getDocCategoryDetail(id: number) {
  * @param params 新建数据
  */
 export function addDocCategory(params: ICategoryItem) {
-  return http.post(`${path}`, params);
+  return http.post(`${path}/`, params);
 }
 
 /**
@@ -56,7 +62,7 @@ export function addDocCategory(params: ICategoryItem) {
  * @param params 更新数据
  */
 export function updateDocCategory(id: number, params: ICategoryItem) {
-  return http.put(`${path}${id}/`, params);
+  return http.put(`${path}/${id}/`, params);
 }
 
 /**
@@ -64,5 +70,5 @@ export function updateDocCategory(id: number, params: ICategoryItem) {
  * @param id 文档id
  */
 export function deleteDocCategory(id: number) {
-  return http.delete(`${path}${id}/`);
+  return http.delete(`${path}/${id}/`);
 }

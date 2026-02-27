@@ -17,6 +17,26 @@
  */
 
 import http from '../http';
+import type { ICountAndResults } from '@/services/types/utils.ts';
+import type {
+  IMCPServerCategoryOutput,
+  IMCPServerConfigListOutput,
+  IMCPServerFilterOptionsOutput,
+  IMCPServerGuidelineOutput,
+  IMCPServerListOutput,
+  IMCPServerRemotePromptsOutput,
+  IMCPServerRetrieveOutput,
+  IMCPServerToolDocOutput,
+  IMCPServerToolOutput,
+  IMCPServerUserCustomDocOutput,
+} from '@/services/types/responses/gateways.ts';
+import type {
+  IGatewaysMcpServersCategoriesListQuery,
+  IGatewaysMcpServersFilterOptionsListQuery,
+  IGatewaysMcpServersListQuery,
+  IGatewaysMcpServersRemotePromptsListQuery,
+  IGatewaysMcpServersToolsListQuery,
+} from '@/services/types/query/gateways.ts';
 
 const path = '/gateways';
 
@@ -102,15 +122,12 @@ export interface IMCPAIConfig {
 }
 
 // 列表
-export const getServers = (apigwId: number, data: {
-  offset: number
-  limit: number
-}): Promise<{ results: IMCPServer[] }> =>
-  http.get(`${path}/${apigwId}/mcp-servers/`, data);
+export const getServers = (apigwId: number, data: IGatewaysMcpServersListQuery) =>
+  http.get<ICountAndResults<IMCPServerListOutput>>(`${path}/${apigwId}/mcp-servers/`, data);
 
 // 详情
-export const getServer = (apigwId: number, serverId: number): Promise<IMCPServer> =>
-  http.get(`${path}/${apigwId}/mcp-servers/${serverId}/`);
+export const getServer = (apigwId: number, serverId: number) =>
+  http.get<IMCPServerRetrieveOutput>(`${path}/${apigwId}/mcp-servers/${serverId}/`);
 
 // 创建
 export const createServer = (apigwId: number, data: {
@@ -139,27 +156,24 @@ export const patchServerStatus = (apigwId: number, serverId: number, data: { sta
   http.patch(`${path}/${apigwId}/mcp-servers/${serverId}/status/`, data);
 
 // 工具列表
-export const getServerTools = (apigwId: number, mcp_server_id: number): Promise<IMCPServerTool[]> =>
-  http.get(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/tools/`);
+export const getServerTools = (apigwId: number, mcp_server_id: number, query: IGatewaysMcpServersToolsListQuery = {}) =>
+  http.get<IMCPServerToolOutput[]>(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/tools/`, query);
 
 // 工具文档
-export const getServerToolDoc = (apigwId: number, mcp_server_id: number, tool_name: string): Promise<{
-  type: string
-  content: string
-  updated_time: string
-}> => http.get(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/tools/${tool_name}/doc/`);
+export const getServerToolDoc = (apigwId: number, mcp_server_id: number, tool_name: string) =>
+  http.get<IMCPServerToolDocOutput>(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/tools/${tool_name}/doc/`);
 
 // 指引文档
-export const getServerGuideDoc = (apigwId: number, mcp_server_id: number): Promise<{ content: string }> =>
-  http.get(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/guideline/`);
+export const getServerGuideDoc = (apigwId: number, mcp_server_id: number) =>
+  http.get<IMCPServerGuidelineOutput>(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/guideline/`);
 
 /**
  * 获取 MCPServer 用户自定义文档
  * @param {Number} apigwId 网关id
  * @param {Number} mcp_server_id mcpServer id
  */
-export const getCustomServerGuideDoc = (apigwId: number, mcp_server_id: number): Promise<{ content: string }> =>
-  http.get(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/user-custom-doc/`);
+export const getCustomServerGuideDoc = (apigwId: number, mcp_server_id: number) =>
+  http.get<IMCPServerUserCustomDocOutput>(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/user-custom-doc/`);
 
 /**
  * 新建 MCPServer 用户自定义文档
@@ -191,8 +205,8 @@ export const deleteCustomServerGuideDoc = (apigwId: number, mcp_server_id: numbe
  * 获取 MCPServer 已关联的 Prompts 配置
  * @param {Number} apigwId 网关id
  */
-export const getServerPrompts = (apigwId: number): Promise<IMCPServerPrompt> =>
-  http.get(`${path}/${apigwId}/mcp-servers/-/remote-prompts/`);
+export const getServerPrompts = (apigwId: number, query: IGatewaysMcpServersRemotePromptsListQuery = {}) =>
+  http.get<IMCPServerRemotePromptsOutput>(`${path}/${apigwId}/mcp-servers/-/remote-prompts/`, query);
 
 /**
  * 根据 PromptID 列表批量获取第三方平台 Prompts 内容
@@ -206,22 +220,19 @@ export const getServerPromptsDetail = (apigwId: number, data: { ids: number[] })
  * 获取 MCPServer 搜索过滤选项（环境、标签、分类）
  * @param apigwId 网关id
  */
-export const getMcpServerFilterOptions = (apigwId: number): Promise<{ data: IMCPServerFilterOptions }> =>
-  http.get(`${path}/${apigwId}/mcp-servers/-/filter-options/`);
+export const getMcpServerFilterOptions = (apigwId: number, query: IGatewaysMcpServersFilterOptionsListQuery = {}) =>
+  http.get<IMCPServerFilterOptionsOutput>(`${path}/${apigwId}/mcp-servers/-/filter-options/`, query);
 
 /**
  * 获取可用的 MCPServer 分类列表（排除官方和精选）
  * @param apigwId 网关id
  */
-export const getMcpCategoryList = (apigwId: number): Promise<{
-  results: IMCPServerCategory[]
-  count: number
-}> =>
-  http.get(`${path}/${apigwId}/mcp-servers/-/categories/`);
+export const getMcpCategoryList = (apigwId: number, query: IGatewaysMcpServersCategoriesListQuery = {}) =>
+  http.get<IMCPServerCategoryOutput[]>(`${path}/${apigwId}/mcp-servers/-/categories/`, query);
 
 /**
  * 获取 MCPServer 的配置列表（支持 Cursor、CodeBuddy、Claude、AIDev 等工具的配置）
  * @param apigwId 网关id
  */
 export const getMcpAIConfigList = (apigwId: number, mcp_server_id: number): Promise<{ configs: IMCPAIConfig[] }> =>
-  http.get(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/configs/`);
+  http.get<IMCPServerConfigListOutput>(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/configs/`);

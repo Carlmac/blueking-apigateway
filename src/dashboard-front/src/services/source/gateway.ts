@@ -16,61 +16,22 @@
  * to the current version of the project delivered to anyone in the future.
  */
 import http from '../http';
+import type {
+  IGatewayCheckNameAvailableOutput,
+  IGatewayDevGuidelineOutput,
+  IGatewayLabelOutput,
+  IGatewayListOutput,
+  IGatewayReleasingStatusOutput,
+  IGatewayRetrieveOutput,
+} from '@/services/types/responses/gateways.ts';
+import type { ICountAndResults } from '@/services/types/utils.ts';
+import type {
+  IGatewaysCheckNameAvailableReadQuery,
+  IGatewaysLabelsListQuery,
+  IGatewaysListQuery,
+} from '@/services/types/query/gateways.ts';
 
 const path = '/gateways';
-
-interface IStage {
-  id: number
-  name: string
-  released: boolean
-}
-
-interface IApiGateway {
-  id: number
-  name: string
-  description: string
-  description_en?: string
-  tenant_mode: string
-  tenant_id: string
-  status: number
-  kind: number
-  is_public: boolean
-  is_official: boolean
-  resource_count: number
-  stages: IStage[]
-  extra_info: any
-  created_by: string
-  created_time: string
-  updated_time: string
-  operation_status: {
-    status?: string
-    link?: string
-    source?: string
-  }
-}
-
-interface IApiGatewayDetail extends IApiGateway {
-  maintainers: []
-  doc_maintainers: {
-    type: string
-    contacts: string[]
-    service_account: {
-      name: string
-      link: string
-    }
-  }
-  developers: string[]
-  public_key: string
-  allow_update_gateway_auth: boolean
-  api_domain: string
-  docs_url: string
-  public_key_fingerprint: string
-  bk_app_codes: string[]
-  related_app_codes: string[]
-  links: any
-  is_deprecated: boolean
-  deprecated_note: string
-}
 
 interface IApiGatewayEditParam {
   // 名称
@@ -137,18 +98,12 @@ interface IApiGatewayEditParam {
   tenant_id: string
 }
 
-export function getGatewayList(params: {
-  limit?: number
-  offset?: number
-} = {}) {
-  return http.get<{
-    count: number
-    results: IApiGateway[]
-  }>(`${path}/`, params);
+export function getGatewayList(params: IGatewaysListQuery = {}) {
+  return http.get<ICountAndResults<IGatewayListOutput>>(`${path}/`, params);
 }
 
 export function getGatewayDetail(id: number) {
-  return http.get<IApiGatewayDetail>(`${path}/${id}/`);
+  return http.get<IGatewayRetrieveOutput>(`${path}/${id}/`);
 }
 
 // 新建网关
@@ -160,19 +115,18 @@ export const patchGateway = (id: number, data: Partial<IApiGatewayEditParam>) =>
 
 export const putGatewayBasics = (id: number, data: Partial<IApiGatewayEditParam>) => http.put(`${path}/${id}/`, data);
 
-export const checkNameAvailable = (param: { name: string }) => http.get(`${path}/check-name-available/`, param);
+export const checkNameAvailable = (param: IGatewaysCheckNameAvailableReadQuery) =>
+  http.get<IGatewayCheckNameAvailableOutput>(`${path}/check-name-available/`, param);
 
 // 获取操作指引
-export const getGuideDocs = (id: number) => http.get(`${path}/${id}/dev-guideline/`);
+export const getGuideDocs = (id: number) => http.get<IGatewayDevGuidelineOutput>(`${path}/${id}/dev-guideline/`);
 
 export const toggleStatus = (id: number, data: { status: number }) => http.put(`${path}/${id}/status/`, data);
 
-export const getGatewayLabels = (apigwId: number) => http.get<{
-  id: number
-  name: string
-}[]>(`${path}/${apigwId}/labels/`);
+export const getGatewayLabels = (apigwId: number, query: IGatewaysLabelsListQuery = {}) =>
+  http.get<IGatewayLabelOutput[]>(`${path}/${apigwId}/labels/`, query);
 
-export const getReleasingStatus = (apigwId: number) => http.get(`${path}/${apigwId}/releasing-status/`);
+export const getReleasingStatus = (apigwId: number) => http.get<IGatewayReleasingStatusOutput>(`${path}/${apigwId}/releasing-status/`);
 
 /**
  * 导出文档

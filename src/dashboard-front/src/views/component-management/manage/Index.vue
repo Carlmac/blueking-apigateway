@@ -136,13 +136,13 @@ import {
   deleteComponentByBatch,
   getComponentsDetail,
   getEsbComponents,
-  getFeatures,
   getReleaseStatus,
 } from '@/services/source/component-management.ts';
 import { getSystems } from '@/services/source/system';
 import AddComponentSlider from './components/AddComponent.vue';
 import RenderSystem from './components/RenderSystem.vue';
 import AgTable from '@/components/ag-table/Index.vue';
+import { getFeatureFlags } from '@/services/source/basic.ts';
 
 type ISystemFilterMethod = {
   setSelected: (value: number) => void
@@ -507,7 +507,7 @@ const getFeature = async () => {
     limit: 10000,
     offset: 0,
   };
-  const res = await getFeatures(params);
+  const res = await getFeatureFlags(params);
   syncEsbToApigwEnabled.value = res?.SYNC_ESB_TO_APIGW_ENABLED;
 };
 

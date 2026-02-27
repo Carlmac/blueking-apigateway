@@ -370,10 +370,7 @@ const getMenuList = async (item: { id: string }, keyword: string) => {
   }
 
   if (item.id === 'username' && keyword && featureFlagStore.isEnableDisplayName) {
-    const list = await getTenantUsers({ keyword }, userInfoStore.info.tenant_id) as {
-      bk_username: string
-      display_name: string
-    }[];
+    const list = await getTenantUsers({ keyword }, userInfoStore.info.tenant_id);
     return list.map(user => ({
       id: user.bk_username,
       name: user.display_name,

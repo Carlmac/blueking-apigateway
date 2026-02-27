@@ -235,7 +235,7 @@
 <script lang="tsx" setup>
 import {
   getComponentSystemList,
-  getESBSDKlist,
+  getESBSDKList,
 } from '@/services/source/docs-esb';
 import { getGatewaysDocs } from '@/services/source/docs';
 import SDKInstructionSlider from './components/SDKInstructionSlider.vue';
@@ -522,7 +522,7 @@ const fetchComponentSystemList = async () => {
     const systemList = await getComponentSystemList(board.value) as IBoard[];
     // esb 的 sdk 语言，目前只有 python
     const language = 'python';
-    const sdkResponse = await getESBSDKlist(board.value, { language }) as IComponentSdk[];
+    const sdkResponse = await getESBSDKList(board.value, { language }) as IComponentSdk[];
     const sdkList = sdkResponse || [];
     sdkList.forEach((sdk) => {
       sdk.language = language;
@@ -893,6 +893,7 @@ $primary-color: #3a84ff;
 }
 
 .docs-list {
+
   :deep(.t-table__content) {
     max-height: 652px !important;
   }
