@@ -21,6 +21,7 @@ import type {
   ISystemListResponse,
 } from '@/services/types/responses/esb.ts';
 import type { IEsbSystemsListQuery } from '@/services/types/query/esb.ts';
+import type { IEsbSystemsUpdate } from '@/services/types/update/esb.ts';
 
 const path = '/esb/systems';
 
@@ -71,7 +72,7 @@ export function addSystem(params: ISystemConfig) {
 /**
  *  更新系统管理
  */
-export function updateSystem(systemId: number, params: ISystemConfig) {
+export function updateSystem(systemId: number, params: IEsbSystemsUpdate) {
   return http.put(`${path}/${systemId}/`, params);
 }
 

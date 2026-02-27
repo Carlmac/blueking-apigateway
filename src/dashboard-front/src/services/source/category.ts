@@ -21,6 +21,7 @@ import type {
   IDocCategoryListResponse,
 } from '@/services/types/responses/esb.ts';
 import type { IEsbDocCategoriesListQuery } from '@/services/types/query/esb.ts';
+import type { IEsbDocCategoriesUpdate } from '@/services/types/update/esb.ts';
 
 const path = '/esb/doc-categories';
 
@@ -61,7 +62,7 @@ export function addDocCategory(params: ICategoryItem) {
  * @param id 文档id
  * @param params 更新数据
  */
-export function updateDocCategory(id: number, params: ICategoryItem) {
+export function updateDocCategory(id: number, params: IEsbDocCategoriesUpdate) {
   return http.put(`${path}/${id}/`, params);
 }
 

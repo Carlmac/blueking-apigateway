@@ -30,6 +30,8 @@ import type {
   IEsbComponentsListQuery,
   IEsbComponentsSyncReleaseHistoriesListQuery,
 } from '@/services/types/query/esb.ts';
+import type { IEsbComponentsUpdate } from '@/services/types/update/esb.ts';
+import type { IEsbComponentsCreate } from '@/services/types/create/esb.ts';
 
 const path = '/esb/components';
 
@@ -80,11 +82,11 @@ export function getEsbComponents(params: IEsbComponentsListQuery) {
   return http.get<IESBChannelListResponse>(`${path}/`, params);
 }
 
-export function addComponent(params: IComponentItem) {
+export function addComponent(params: IEsbComponentsCreate) {
   return http.post(`${path}/`, params);
 }
 
-export function updateComponent(id: number, params: IComponentItem) {
+export function updateComponent(id: number, params: IEsbComponentsUpdate) {
   return http.put(`${path}/${id}/`, params);
 }
 
