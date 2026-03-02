@@ -22,17 +22,9 @@ import type {
 } from '@/services/types/responses/esb.ts';
 import type { IEsbSystemsListQuery } from '@/services/types/query/esb.ts';
 import type { IEsbSystemsUpdate } from '@/services/types/update/esb.ts';
+import type { IEsbSystemsCreate } from '@/services/types/create/esb.ts';
 
 const path = '/esb/systems';
-
-export interface ISystemConfig {
-  name: string
-  description: string
-  comment: string
-  doc_category_id: string
-  timeout: number
-  maintainers: string[]
-}
 
 export interface ISystemItem {
   comment: string
@@ -65,7 +57,7 @@ export function getSystemDetail(systemId: number) {
 /**
  *  新增系统管理
  */
-export function addSystem(params: ISystemConfig) {
+export function addSystem(params: IEsbSystemsCreate) {
   return http.post(`${path}/`, params);
 }
 
