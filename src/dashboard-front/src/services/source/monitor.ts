@@ -27,6 +27,8 @@ import type {
   IGatewaysMonitorsAlarmRecordsListQuery,
   IGatewaysMonitorsAlarmStrategiesListQuery,
 } from '@/services/types/query/gateways.ts';
+import type { IAlarmStrategyInputSLZ } from '@/services/types/body/post/gateways.ts';
+import type { IAlarmStrategyUpdateStatusInputSLZ } from '@/services/types/body/patch/gateways.ts';
 
 export interface IAlarmStrategy {
   id: number
@@ -91,7 +93,7 @@ export function getStrategyDetail(apigwId: number, id: number) {
  * @param apigwId 网关id
  * @param params 创建参数
  */
-export function createStrategy(apigwId: number, params: IAlarmStrategy) {
+export function createStrategy(apigwId: number, params: IAlarmStrategyInputSLZ) {
   return http.post(`/gateways/${apigwId}/monitors/alarm/strategies/`, params);
 }
 
@@ -101,7 +103,7 @@ export function createStrategy(apigwId: number, params: IAlarmStrategy) {
  * @param id 告警策略id
  * @param params 更新参数
  */
-export function updateStrategy(apigwId: number, id: number, params: IAlarmStrategy) {
+export function updateStrategy(apigwId: number, id: number, params: IAlarmStrategyInputSLZ) {
   return http.put(`/gateways/${apigwId}/monitors/alarm/strategies/${id}`, params);
 }
 
@@ -120,7 +122,7 @@ export function deleteStrategy(apigwId: number, id: number) {
  * @param id 告警策略id
  * @param params 更新状态参数
  */
-export function updateStrategyStatus(apigwId: number, id: number, params: { enabled: boolean }) {
+export function updateStrategyStatus(apigwId: number, id: number, params: IAlarmStrategyUpdateStatusInputSLZ) {
   return http.patch(`/gateways/${apigwId}/monitors/alarm/strategies/${id}/status/`, params);
 }
 

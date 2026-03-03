@@ -30,8 +30,8 @@ import type {
   IEsbComponentsListQuery,
   IEsbComponentsSyncReleaseHistoriesListQuery,
 } from '@/services/types/query/esb.ts';
-import type { IEsbComponentsUpdate } from '@/services/types/update/esb.ts';
-import type { IEsbComponentsCreate } from '@/services/types/create/esb.ts';
+import type { IEsbComponentsUpdate } from '@/services/types/body/patch/esb.ts';
+import type { IEsbComponentsCreate } from '@/services/types/body/post/esb.ts';
 
 const path = '/esb/components';
 

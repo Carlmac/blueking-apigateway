@@ -23,10 +23,11 @@ import type {
   IReleaseHistoryListOutput,
 } from '@/services/types/responses/gateways.ts';
 import type { IGatewaysReleasesHistoriesListQuery } from '@/services/types/query/gateways.ts';
+import type { IReleaseInputSLZ } from '@/services/types/body/post/gateways.ts';
 
 const path = '/gateways';
 
-export const createRelease = (apigwId: number, params: any) =>
+export const createRelease = (apigwId: number, params: IReleaseInputSLZ) =>
   http.post(`${path}/${apigwId}/releases/`, params, { catchError: true });
 
 export const getReleaseEvents = (apigwId: number, historyId: number) =>

@@ -26,6 +26,7 @@ import type {
 } from '@/services/types/responses/gateways.ts';
 import type {
   IGatewaysReleasesStagesResourcesListQuery,
+  IGatewaysStagesListQuery,
   IGatewaysTestsHistoriesListQuery,
 } from '@/services/types/query/gateways.ts';
 
@@ -36,7 +37,7 @@ const path = '/gateways';
  * @param gatewayId 网关id
  * @returns
  */
-export const getStages = (gatewayId: number, data: any) =>
+export const getStages = (gatewayId: number, data: IGatewaysStagesListQuery = {}) =>
   http.get<IStageListOutput[]>(`${path}/${gatewayId}/stages/`, data);
 
 /**
@@ -57,7 +58,7 @@ export const getResourcesOnline = (
  * @param data 请求数据
  * @returns
  */
-export const postAPITest = (gatewayId: number, data: any) =>
+export const postAPITest = (gatewayId: number, data: Record<string, unknown>) =>
   http.post(`${path}/${gatewayId}/tests/`, data);
 
 /**

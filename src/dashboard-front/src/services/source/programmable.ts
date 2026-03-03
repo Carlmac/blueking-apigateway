@@ -32,6 +32,7 @@ import type {
   IGatewaysReleasesProgrammableDeployHistoriesListQuery,
   IGatewaysResourceVersionsProgrammableNextDeployVersionReadQuery,
 } from '@/services/types/query/gateways.ts';
+import type { IProgrammableDeployCreateInputSLZ } from '@/services/types/body/post/gateways.ts';
 
 const path = '/gateways';
 
@@ -176,7 +177,7 @@ export interface IGatewayEvent {
   step: number // 步骤
   status: string // 状态
   created_time: string // 创建时间
-  detail: any // 详情
+  detail: unknown // 详情
 }
 
 // 网关事件模板接口
@@ -205,13 +206,8 @@ export interface IEventResponse {
 }
 
 // 发布
-export const deployReleases = (apigwId: number, data: {
-  stage_id: number
-  branch: string
-  commit_id: string
-  version: string
-  comment: string
-}) => http.post(`${path}/${apigwId}/releases/programmable/deploy/`, data, { catchError: true });
+export const deployReleases = (apigwId: number, data: IProgrammableDeployCreateInputSLZ) =>
+  http.post(`${path}/${apigwId}/releases/programmable/deploy/`, data, { catchError: true });
 
 // 获取环境详情
 export const getProgrammableStageDetail = (apigwId: number, stageId: number) => http.get<IProgrammableStageDeployOutput>(`${path}/${apigwId}/stages/${stageId}/programmable/`);

@@ -37,6 +37,15 @@ import type {
   IGatewaysMcpServersRemotePromptsListQuery,
   IGatewaysMcpServersToolsListQuery,
 } from '@/services/types/query/gateways.ts';
+import type {
+  IMCPServerCreateInputSLZ,
+  IMCPServerRemotePromptsBatchInputSLZ,
+  IMCPServerUserCustomDocInputSLZ,
+} from '@/services/types/body/post/gateways.ts';
+import type {
+  IMCPServerUpdateInputSLZ,
+  IMCPServerUpdateStatusInputSLZ,
+} from '@/services/types/body/patch/gateways.ts';
 
 const path = '/gateways';
 
@@ -130,30 +139,26 @@ export const getServer = (apigwId: number, serverId: number) =>
   http.get<IMCPServerRetrieveOutput>(`${path}/${apigwId}/mcp-servers/${serverId}/`);
 
 // 创建
-export const createServer = (apigwId: number, data: {
-  name: string
-  description?: string
-  stage_id: number
-  is_public?: boolean
-  labels?: string[]
-  resource_names: string[]
-}) => http.post(`${path}/${apigwId}/mcp-servers/`, data);
+export const createServer = (apigwId: number, data: IMCPServerCreateInputSLZ) =>
+  http.post(`${path}/${apigwId}/mcp-servers/`, data);
 
 // 部分更新
-export const patchServer = (apigwId: number, serverId: number, data: {
-  description?: string
-  is_public?: boolean
-  labels?: string[]
-  resource_names?: string[]
-}) => http.patch(`${path}/${apigwId}/mcp-servers/${serverId}/`, data);
+export const patchServer = (
+  apigwId: number,
+  serverId: number,
+  data: IMCPServerUpdateInputSLZ,
+) => http.patch(`${path}/${apigwId}/mcp-servers/${serverId}/`, data);
 
 // 删除
 export const deleteServer = (apigwId: number, serverId: number) =>
   http.delete(`${path}/${apigwId}/mcp-servers/${serverId}/`);
 
 // 更新 MCPServer 状态，如启用、停用
-export const patchServerStatus = (apigwId: number, serverId: number, data: { status: number }) =>
-  http.patch(`${path}/${apigwId}/mcp-servers/${serverId}/status/`, data);
+export const patchServerStatus = (
+  apigwId: number,
+  serverId: number,
+  data: IMCPServerUpdateStatusInputSLZ,
+) => http.patch(`${path}/${apigwId}/mcp-servers/${serverId}/status/`, data);
 
 // 工具列表
 export const getServerTools = (apigwId: number, mcp_server_id: number, query: IGatewaysMcpServersToolsListQuery = {}) =>
@@ -181,8 +186,11 @@ export const getCustomServerGuideDoc = (apigwId: number, mcp_server_id: number) 
  * @param {Number} mcp_server_id mcpServer id
  * @param {String} data.content 自定义指引内容
  */
-export const addCustomServerGuideDoc = (apigwId: number, mcp_server_id: number, data: { content: string }) =>
-  http.post(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/user-custom-doc/`, data);
+export const addCustomServerGuideDoc = (
+  apigwId: number,
+  mcp_server_id: number,
+  data: IMCPServerUserCustomDocInputSLZ,
+) => http.post(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/user-custom-doc/`, data);
 
 /**
  * 更新 MCPServer 用户自定义文档
@@ -190,7 +198,11 @@ export const addCustomServerGuideDoc = (apigwId: number, mcp_server_id: number, 
  * @param {Number} mcp_server_id mcpServer id
  * @param {String} data.content 自定义指引内容
  */
-export const updateCustomServerGuideDoc = (apigwId: number, mcp_server_id: number, data: { content: string }) =>
+export const updateCustomServerGuideDoc = (
+  apigwId: number,
+  mcp_server_id: number,
+  data: IMCPServerUserCustomDocInputSLZ,
+) =>
   http.put(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/user-custom-doc/`, data);
 
 /**
@@ -213,8 +225,8 @@ export const getServerPrompts = (apigwId: number, query: IGatewaysMcpServersRemo
  * @param apigwId 网关id
  * @param {Number[]} data.ids 当前PromptID组
  */
-export const getServerPromptsDetail = (apigwId: number, data: { ids: number[] }): Promise<IMCPServerPrompt> =>
-  http.post(`${path}/${apigwId}/mcp-servers/-/remote-prompts/batch/`, data);
+export const getServerPromptsDetail = (apigwId: number, data: IMCPServerRemotePromptsBatchInputSLZ) =>
+  http.post<IMCPServerPrompt>(`${path}/${apigwId}/mcp-servers/-/remote-prompts/batch/`, data);
 
 /**
  * 获取 MCPServer 搜索过滤选项（环境、标签、分类）

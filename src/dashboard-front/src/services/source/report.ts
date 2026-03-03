@@ -63,7 +63,7 @@ export interface IChartDataLoading {
  * @param apigwId 网关id
  * @param data 导出参数
  */
-export const exportLogs = (apigwId: number, data: any, extraStr?: string) =>
+export const exportLogs = (apigwId: number, data: Record<string, unknown> = {}, extraStr?: string) =>
   http.get<unknown>(`${path}/${apigwId}/logs/export/?${extraStr}`, data, { responseType: 'blob' });
 
 /**

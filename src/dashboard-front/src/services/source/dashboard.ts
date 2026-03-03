@@ -28,6 +28,7 @@ import type {
   IGatewaysMetricsQueryInstantListQuery,
   IGatewaysMetricsQueryRangeListQuery,
   IGatewaysResourcesListQuery,
+  IGatewaysStagesListQuery,
 } from '@/services/types/query/gateways.ts';
 
 const path = '/gateways';
@@ -132,5 +133,5 @@ export const getApigwResources = (apigwId: number, params: IGatewaysResourcesLis
  * @param apigwId 网关id
  * @param params
  */
-export const getApigwStages = (apigwId: number, params: any) =>
+export const getApigwStages = (apigwId: number, params: IGatewaysStagesListQuery = {}) =>
   http.get<IStageListOutput[]>(`${path}/${apigwId}/stages/`, params);

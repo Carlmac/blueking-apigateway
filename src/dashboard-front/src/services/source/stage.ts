@@ -26,6 +26,11 @@ import type {
   IGatewaysStagesBackendsListQuery,
   IGatewaysStagesListQuery,
 } from '@/services/types/query/gateways.ts';
+import type { IStageInputSLZ } from '@/services/types/body/post/gateways.ts';
+import type {
+  IStageStatusInputSLZ,
+  IStageVarsSLZ,
+} from '@/services/types/body/patch/gateways.ts';
 
 const path = '/gateways';
 
@@ -58,16 +63,17 @@ export const getStageList = (apigwId: number, query: IGatewaysStagesListQuery = 
 export const getStageDetail = (apigwId: number, stageId: number) =>
   http.get<IStageRetrieveOutput>(`${path}/${apigwId}/stages/${stageId}/`);
 
-export const createStage = (apigwId: number, data: any) => http.post(`${path}/${apigwId}/stages/`, data);
+export const createStage = (apigwId: number, data: IStageInputSLZ) =>
+  http.post(`${path}/${apigwId}/stages/`, data);
 
 export const deleteStage = (apigwId: number, stageId: number) =>
   http.delete(`${path}/${apigwId}/stages/${stageId}/`);
 
-export const putStage = (apigwId: number, stageId: number, data: any) =>
+export const putStage = (apigwId: number, stageId: number, data: IStageInputSLZ) =>
   http.put(`${path}/${apigwId}/stages/${stageId}/`, data);
 
-export const toggleStatus = (apigwId: number, stageId: number, param: { status: number }) =>
-  http.put(`${path}/${apigwId}/stages/${stageId}/status/`, param);
+export const toggleStatus = (apigwId: number, stageId: number, params: IStageStatusInputSLZ) =>
+  http.put(`${path}/${apigwId}/stages/${stageId}/status/`, params);
 
 export const getStageBackends = (
   apigwId: number,
@@ -78,4 +84,4 @@ export const getStageBackends = (
 
 export const getStageVars = (apigwId: number, stageId: number) => http.get<IStageVarsOutput>(`${path}/${apigwId}/stages/${stageId}/vars/`);
 
-export const putStageVars = (apigwId: number, stageId: number, data: any) => http.put(`${path}/${apigwId}/stages/${stageId}/vars/`, data);
+export const putStageVars = (apigwId: number, stageId: number, data: IStageVarsSLZ) => http.put(`${path}/${apigwId}/stages/${stageId}/vars/`, data);

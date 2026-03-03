@@ -41,33 +41,10 @@ import type {
   IGatewaysMcpServersPermissionsListQuery,
   IGatewaysMcpServersStageReleaseCheckReadQuery,
 } from '@/services/types/query/gateways.ts';
+import type { IMCPServerAppPermissionCreateInputSLZ } from '@/services/types/body/post/gateways.ts';
+import type { IMCPServerAppPermissionApplyUpdateInputSLZ } from '@/services/types/body/patch/gateways.ts';
 
 const path = '/gateways';
-
-export interface IMarketplace {
-  limit: number
-  offset: number
-  keyword?: string
-  order_by?: string
-  categories?: string
-}
-
-export interface IStageReleaseCheckMcp {
-  stage_id: number
-  resource_version_id: number
-}
-
-export interface IMcpPermissions {
-  bk_app_code: string
-  grant_type: string
-}
-
-export interface IMcpAppPermissionApply {
-  bk_app_code: string
-  state: string
-  applied_by: string
-  mcp_server_id: number
-}
 
 export interface IMarketplaceItem {
   id: number
@@ -176,7 +153,11 @@ export const getMcpPermissions = (
  * @param mcp_server_id
  * @param data 创建参数
  */
-export const authMcpPermissions = (apigwId: number, mcp_server_id: number, data: any) =>
+export const authMcpPermissions = (
+  apigwId: number,
+  mcp_server_id: number,
+  data: IMCPServerAppPermissionCreateInputSLZ,
+) =>
   http.post(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/permissions/`, data);
 
 /**
@@ -215,7 +196,12 @@ export const getMcpPermissionsApplicant = (
  * @param id mcp id
  * @param data 更新状态参数
  */
-export const updateMcpPermissions = (apigwId: number, mcp_server_id: number, id: number, data: any) =>
+export const updateMcpPermissions = (
+  apigwId: number,
+  mcp_server_id: number,
+  id: number,
+  data: IMCPServerAppPermissionApplyUpdateInputSLZ,
+) =>
   http.patch(`${path}/${apigwId}/mcp-servers/${mcp_server_id}/permissions/app-permission-apply/${id}/status/`, data);
 
 /**

@@ -22,13 +22,15 @@ import type { IGatewaySDKListOutput } from '@/services/types/responses/gateways.
 import type { IDocsSdksDocReadResponse } from '@/services/types/responses/docs.ts';
 import type { IDocsSdksDocReadQuery } from '@/services/types/query/docs.ts';
 import type { IGatewaysSdksListQuery } from '@/services/types/query/gateways.ts';
+import type { IGatewaySDKGenerateInputSLZ } from '@/services/types/body/post/gateways.ts';
 
 const path = '/gateways';
 
 export const getSDKList = (apigwId: number, data: IGatewaysSdksListQuery = {}) =>
   http.get<ICountAndResults<IGatewaySDKListOutput>>(`${path}/${apigwId}/sdks/`, data);
 
-export const createSDK = (apigwId: number, data: any) => http.post(`${path}/${apigwId}/sdks/`, data);
+export const createSDK = (apigwId: number, data: IGatewaySDKGenerateInputSLZ) =>
+  http.post(`${path}/${apigwId}/sdks/`, data);
 
 /**
  *  获取指定语言（python）的网关 SDK 说明文档

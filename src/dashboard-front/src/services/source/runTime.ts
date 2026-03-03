@@ -51,8 +51,8 @@ export interface ITimeChartResponse {
  *  查询 runner
  * @param timeRange 查询运行时间
  */
-export function getApigwRuntime({ timeRange }: any) {
-  return http.get<ISystemsSummaryResponse[]>(`${path}/summary/?time_since=${timeRange}`);
+export function getApigwRuntime(query: { timeRange: string }) {
+  return http.get<ISystemsSummaryResponse[]>(`${path}/summary/?time_since=${query.timeRange}`);
 }
 
 /**

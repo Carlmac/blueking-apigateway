@@ -28,6 +28,7 @@ import type {
   IGatewaysLogsListQuery,
   IGatewaysLogsReadQuery,
   IGatewaysLogsTimechartReadQuery,
+  IGatewaysStagesListQuery,
 } from '@/services/types/query/gateways.ts';
 
 const path = '/gateways';
@@ -101,5 +102,5 @@ export const getLogsInfo = (requestId: string) =>
  *  获取stage数据
  * @param gatewayId 网关id
  */
-export const fetchApigwStages = (gatewayId: number, params: any) =>
+export const fetchApigwStages = (gatewayId: number, params: IGatewaysStagesListQuery = {}) =>
   http.get<IStageListOutput[]>(`${path}/${gatewayId}/stages/`, params);

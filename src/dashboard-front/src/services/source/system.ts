@@ -21,8 +21,8 @@ import type {
   ISystemListResponse,
 } from '@/services/types/responses/esb.ts';
 import type { IEsbSystemsListQuery } from '@/services/types/query/esb.ts';
-import type { IEsbSystemsUpdate } from '@/services/types/update/esb.ts';
-import type { IEsbSystemsCreate } from '@/services/types/create/esb.ts';
+import type { IEsbSystemsUpdate } from '@/services/types/body/patch/esb.ts';
+import type { IEsbSystemsCreate } from '@/services/types/body/post/esb.ts';
 
 const path = '/esb/systems';
 

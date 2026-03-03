@@ -42,7 +42,8 @@ export const getGatewaysDocs = (data: IDocsGatewaysListQuery = {}) =>
   http.get<ICountAndResults<IDocsGatewaysListResponse>>(`${path}/`, data);
 
 // 获取网关文档详情
-export const getGatewaysDetailsDocs = (gatewayName: string, data: any) => http.get<IDocsGatewaysReadResponse>(`${path}/${gatewayName}/`, data);
+export const getGatewaysDetailsDocs = (gatewayName: string, data: { source?: string } = {}) =>
+  http.get<IDocsGatewaysReadResponse>(`${path}/${gatewayName}/`, data);
 
 // 获取网关资源的文档
 export const getApigwResourceDocDocs = (

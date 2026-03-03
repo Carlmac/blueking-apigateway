@@ -21,8 +21,8 @@ import type {
   IDocCategoryListResponse,
 } from '@/services/types/responses/esb.ts';
 import type { IEsbDocCategoriesListQuery } from '@/services/types/query/esb.ts';
-import type { IEsbDocCategoriesUpdate } from '@/services/types/update/esb.ts';
-import type { IEsbDocCategoriesCreate } from '@/services/types/create/esb.ts';
+import type { IEsbDocCategoriesUpdate } from '@/services/types/body/patch/esb.ts';
+import type { IEsbDocCategoriesCreate } from '@/services/types/body/post/esb.ts';
 
 const path = '/esb/doc-categories';
 

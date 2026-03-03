@@ -35,6 +35,7 @@ import type {
   IGatewaysPluginsReadQuery,
   IGatewaysPluginsTagsListQuery,
 } from '@/services/types/query/gateways.ts';
+import type { IPluginConfigBaseSLZ } from '@/services/types/body/post/gateways.ts';
 
 const path = '/gateways';
 
@@ -82,7 +83,13 @@ export const getScopeBindingPluginList = (
  * @param code 插件code
  * @param data 插件的参数
  */
-export const createPlugin = (apigwId: number, scopeType: string, scopeId: number, code: string, data: any) =>
+export const createPlugin = (
+  apigwId: number,
+  scopeType: string,
+  scopeId: number,
+  code: string,
+  data: IPluginConfigBaseSLZ,
+) =>
   http.post(`${path}/${apigwId}/plugins/${scopeType}/${scopeId}/${code}/configs/`, data);
 
 /**
@@ -111,7 +118,7 @@ export const updatePluginConfig = (
   scopeId: number,
   code: string,
   id: number,
-  data: any,
+  data: IPluginConfigBaseSLZ,
 ) =>
   http.put(`${path}/${apigwId}/plugins/${scopeType}/${scopeId}/${code}/configs/${id}/`, data);
 

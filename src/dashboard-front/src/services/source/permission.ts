@@ -31,6 +31,13 @@ import type {
   IGatewaysPermissionsAppPermissionsListQuery,
   IGatewaysResourcesListQuery,
 } from '@/services/types/query/gateways.ts';
+import type {
+  IAppPermissionApplyApprovalInputSLZ,
+  IAppPermissionExportInputSLZ,
+  IAppPermissionIDsSLZ,
+  IAppPermissionInputSLZ,
+  IAppPermissionRenewInputSLZ,
+} from '@/services/types/body/post/gateways.ts';
 
 export interface IBatchUpdateParams {
   resource_dimension_ids: number[]
@@ -113,14 +120,7 @@ export function getPermissionApplyList(apigwId: number, params: IGatewaysPermiss
  * @param apigwId 网关id
  * @param params
  */
-export function updatePermissionStatus(
-  apigwId: number,
-  params: {
-    ids: []
-    status: string
-    comment: string
-    part_resource_ids: Record<string, unknown>
-  }) {
+export function updatePermissionStatus(apigwId: number, params: IAppPermissionApplyApprovalInputSLZ) {
   return http.post(`/gateways/${apigwId}/permissions/app-permission-apply/approval/`, params);
 }
 
@@ -153,7 +153,7 @@ export function getPermissionRecordList(
  * @param apigwId 网关id
  * @param params 授权参数
  */
-export function authApiPermission(apigwId: number, params: IAuthData) {
+export function authApiPermission(apigwId: number, params: IAppPermissionInputSLZ) {
   return http.post(`/gateways/${apigwId}/permissions/app-gateway-permissions/`, params);
 }
 
@@ -218,18 +218,18 @@ export function getResourceListData(apigwId: number, params: IGatewaysResourcesL
  * @param apigwId 网关id
  * @param params 导出参数
  */
-export async function exportPermissionList(apigwId: number, params: IExportParams) {
+export async function exportPermissionList(apigwId: number, params: IAppPermissionExportInputSLZ) {
   return await http.post(`/gateways/${apigwId}/permissions/app-permissions/export/`, params, {
     responseType: 'blob',
     catchError: true,
   });
-};
+}
 
 /**
  *  批量权限续期
  * @param apigwId 网关id
  * @param params 导出参数
  */
-export function batchUpdatePermission(apigwId: number, params: IBatchUpdateParams) {
+export function batchUpdatePermission(apigwId: number, params: IAppPermissionRenewInputSLZ) {
   return http.post(`/gateways/${apigwId}/permissions/app-permissions/renew/`, params);
 }
