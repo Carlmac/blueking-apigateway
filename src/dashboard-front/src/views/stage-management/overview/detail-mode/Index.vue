@@ -289,7 +289,6 @@ import { Message } from 'bkui-vue';
 import { getStageStatus } from '@/utils';
 import { getProgrammableStageDetail } from '@/services/source/programmable';
 import {
-  type IStageListItem,
   deleteStage,
   getStageDetail,
   getStageList,
@@ -309,12 +308,15 @@ import ReleaseStage from '@/components/release-stage/Index.vue';
 import ResourceInfo from './components/ResourceInfo.vue';
 import PluginManagement from './components/PluginManagement.vue';
 import VarManagement from './components/VarManagement.vue';
+import type { IExtractApiReturn } from '@/services/types/utils.ts';
 
-interface IProps { stageId: number }
+type IPaasInfo = IExtractApiReturn<typeof getProgrammableStageDetail>;
+
+type IStageListItem = IExtractApiReturn<typeof getStageList>[number];
 
 interface ILocalStageItem extends IStageListItem { paasInfo?: IPaasInfo }
 
-type IPaasInfo = Awaited<ReturnType<typeof getProgrammableStageDetail>>;
+interface IProps { stageId: number }
 
 const { stageId } = defineProps<IProps>();
 
@@ -338,7 +340,7 @@ const {
 const stageList = ref([]);
 const loadingProgrammableStageIds = ref<number[]>([]);
 // 当前环境信息
-const currentStage = ref<IStageListItem | null>(null);
+const currentStage = ref<IExtractApiReturn<typeof getStageDetail> | null>(null);
 const releaseStageRef = ref();
 const releaseProgrammableRef = ref();
 const stageSidesliderRef = ref();

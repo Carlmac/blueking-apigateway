@@ -118,8 +118,7 @@ import ReleaseProgrammable from '../components/ReleaseProgrammable.vue';
 import CreateStage from '../components/CreateStage.vue';
 import ReleaseStageEvent from '@/components/release-stage-event/Index.vue';
 import ReleaseProgrammableEvent from '../../components/ReleaseProgrammableEvent.vue';
-
-type GatewayDetailType = Awaited<ReturnType<typeof getGatewayDetail>>;
+import type { IExtractApiReturn } from '@/services/types/utils.ts';
 
 type IPaasInfo = Awaited<ReturnType<typeof getProgrammableStageDetail>>;
 
@@ -144,25 +143,7 @@ const logDetailsRef = ref();
 const programmableEventSliderRef = ref();
 
 // 当前网关基本信息
-const basicInfoData = ref<Partial<GatewayDetailType>>({
-  status: 1,
-  name: '',
-  description: '',
-  description_en: '',
-  public_key_fingerprint: '',
-  bk_app_codes: [],
-  docs_url: '',
-  api_domain: '',
-  created_by: '',
-  created_time: '',
-  public_key: '',
-  maintainers: [],
-  developers: [],
-  is_public: true,
-  is_official: false,
-  related_app_codes: [],
-  kind: 0,
-});
+const basicInfoData = ref<IExtractApiReturn<typeof getGatewayDetail>>();
 
 const stageList = ref<ILocalStageItem[]>([]);
 const stageSidesliderRef = ref();
@@ -194,7 +175,7 @@ async function fetchStageList() {
   const _stageList = response as ILocalStageItem[] || [];
 
   // 获取可编程网关的 stage 详情
-  if (basicInfoData.value.kind === 1) {
+  if (basicInfoData.value?.kind === 1) {
     const tasks: (ReturnType<typeof getProgrammableStageDetail> | Promise<undefined>)[] = [];
 
     for (const stage of _stageList) {

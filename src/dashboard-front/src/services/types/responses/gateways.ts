@@ -86,7 +86,14 @@ export interface IGatewayRetrieveOutput {
   name: string
   description: string | null
   maintainers: string[]
-  doc_maintainers: any
+  doc_maintainers: {
+    type: string
+    contacts: string[]
+    service_account: {
+      name: string
+      link: string
+    }
+  }
   developers: string[]
   status: number
   kind: number | null
@@ -95,13 +102,13 @@ export interface IGatewayRetrieveOutput {
   created_time: string | null
   updated_time: string | null
   public_key: string
-  is_official: string
-  allow_update_gateway_auth: string
+  is_official: boolean
+  allow_update_gateway_auth: boolean
   api_domain: string
   docs_url: string
   public_key_fingerprint: string
-  bk_app_codes: string
-  related_app_codes: string
+  bk_app_codes: string[]
+  related_app_codes: string[]
   tenant_mode: string
   tenant_id: string
   extra_info: string
@@ -1202,7 +1209,11 @@ export interface IStageListOutput {
   description_en: string | null
   status: number
   created_time: string | null
-  release: string
+  release: {
+    status: string
+    created_time: string
+    created_by: string
+  }
   resource_version: string
   publish_id: string
   publish_version: string
@@ -1220,7 +1231,11 @@ export interface IStageRetrieveOutput {
   description_en: string | null
   status: number
   created_time: string | null
-  release: string
+  release: {
+    status: string
+    created_time: string
+    created_by: string
+  }
   resource_version: string
   publish_id: string
   publish_version: string
