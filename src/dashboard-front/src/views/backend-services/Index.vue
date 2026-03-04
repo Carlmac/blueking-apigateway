@@ -75,7 +75,7 @@ import {
 import { getStageList } from '@/services/source/stage';
 import AddBackendService from '@/views/backend-services/components/AddBackendService.vue';
 import AgTable from '@/components/ag-table/Index.vue';
-import type { PrimaryTableProps } from '@blueking/tdesign-ui';
+import type { PrimaryTableProps, TableRowData } from '@blueking/tdesign-ui';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -115,10 +115,7 @@ const columns = computed<PrimaryTableProps['columns']>(() => [
             e,
             row,
           })}
-          onMouseLeave={e => tableRef.value?.handleCellLeave({
-            e,
-            row,
-          })}
+          onMouseleave={() => tableRef.value?.handleCellLeave({ row })}
           onClick={() => handleEdit(row)}
         >
           { row.name }
@@ -152,7 +149,7 @@ const columns = computed<PrimaryTableProps['columns']>(() => [
           <bk-button
             text
             theme="primary"
-            onClick={() => handleResource(row)}
+            onClick={() => handleResource(row.id)}
           >
             { row?.resource_count }
           </bk-button>
@@ -270,21 +267,17 @@ const handleAdd = () => {
 };
 
 // 点击名称/编辑
-const handleEdit = ({ id, name, description }: {
-  id: number
-  name: string
-  description: string
-}) => {
+const handleEdit = (row: TableRowData) => {
   baseInfo.value = Object.assign({}, {
-    name,
-    description,
+    name: row.name,
+    description: row.description,
   });
-  backendServiceId.value = id;
+  backendServiceId.value = row.id;
   addBackendServiceEl.value?.show();
 };
 
 // 点击关联的资源数
-const handleResource = ({ id }: { id: number }) => {
+const handleResource = (id: number) => {
   const params = {
     name: 'ResourceSetting',
     params: { id: apigwId.value },
@@ -293,19 +286,16 @@ const handleResource = ({ id }: { id: number }) => {
   router.push(params);
 };
 
-const handleDelete = ({ id, name }: {
-  name: string
-  id: number
-}) => {
+const handleDelete = (row: TableRowData) => {
   usePopInfoBox({
     isShow: true,
     type: 'warning',
-    title: t(`确定删除【${name}】该服务？`),
+    title: t(`确定删除【${row.name}】该服务？`),
     subTitle: t('删除操作无法撤回，请谨慎操作'),
     confirmText: t('删除'),
     confirmButtonTheme: 'danger',
     onConfirm: async () => {
-      await deleteBackendService(apigwId.value, id);
+      await deleteBackendService(apigwId.value, row.id);
       Message({
         message: t('删除成功'),
         theme: 'success',

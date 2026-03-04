@@ -421,7 +421,8 @@ import {
   isEqual,
 } from 'lodash-es';
 import {
-  Form, Input,
+  Form,
+  Input,
   Message,
 } from 'bkui-vue';
 import {
@@ -444,11 +445,23 @@ import { getStageList } from '@/services/source/stage';
 import AgSideslider from '@/components/ag-sideslider/Index.vue';
 import KeyFormItem from '@/views/backend-services/components/KeyFormItem.vue';
 import HealthChecks from '@/views/backend-services/components/health-checks/Index.vue';
+import type { IExtractApiReturn } from '@/services/types/utils.ts';
+
+interface ILocalStageConfig {
+  id: number
+  description?: string | null
+  name: string
+  // stage_id: number
+  configs: Parameters<typeof createBackendService>[1]['configs'][number]
+}
 
 interface IProps {
   editId?: number
   disabled?: boolean
-  base: Record<string, any>
+  base: {
+    name: string
+    description: string
+  }
 }
 
 interface Emits { (e: 'done'): void }
@@ -469,16 +482,16 @@ const baseInfo = ref({
   name: '',
   description: '',
 });
-const curServiceDetail = ref({
+const curServiceDetail = ref<IExtractApiReturn<typeof getBackendServiceDetail>>({
   id: 0,
   name: '',
   description: '',
   configs: [],
 });
 const initData = ref();
-const stageConfig = ref([]);
+const stageConfig = ref<ILocalStageConfig[]>([]);
 const activeIndex = ref<number[]>([]);
-const stageList = ref([]);
+const stageList = ref<IExtractApiReturn<typeof getStageList>>([]);
 const stageConfigRef = ref([]);
 const isPublish = ref(false);
 const isSaveLoading = ref(false);
@@ -772,9 +785,9 @@ const toStageReleaseRecord = () => {
 };
 
 const setInit = () => {
-  stageConfig.value = stageList.value.map((item: Record<string, string | number>) => {
+  stageConfig.value = stageList.value.map((item) => {
     const { name, id, description } = item;
-    const newItem = {
+    return {
       name,
       id,
       description,
@@ -791,7 +804,6 @@ const setInit = () => {
         stage_id: id,
       },
     };
-    return newItem;
   });
   const sliderParams = {
     curServiceDetail: curServiceDetail.value,
@@ -822,9 +834,13 @@ const getInfo = async () => {
   curServiceDetail.value = cloneDeep(res);
   stageConfig.value = res.configs.map((item) => {
     return {
-      configs: item,
-      name: item?.stage?.name,
-      id: item?.stage?.id,
+      id: item.stage.id,
+      name: item.stage.name,
+      description: null,
+      configs: {
+        stage_id: item.stage.id,
+        ...item,
+      },
     };
   });
   const sliderParams = {

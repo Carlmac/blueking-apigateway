@@ -16,12 +16,20 @@ export interface IGatewayListOutput {
   is_public: boolean
   is_official: string
   resource_count: string
-  stages: string
+  stages: {
+    id: number
+    name: string
+    released: boolean
+  }[]
   extra_info: string
   created_by: string | null
   created_time: string | null
   updated_time: string | null
-  operation_status: string
+  operation_status: {
+    link: string
+    source: string
+    status: string
+  }
 }
 
 /**
@@ -161,7 +169,7 @@ export interface IBackendListOutput {
 export interface IBackendRetrieveOutput {
   id: number
   name: string
-  description: string
+  description: string | null
   configs: {
     checks?: IHealthCheck
     hosts: {
@@ -176,6 +184,8 @@ export interface IBackendRetrieveOutput {
     }
     timeout: number
     type: string
+    hash_on?: string
+    key?: string
   }[]
 }
 
