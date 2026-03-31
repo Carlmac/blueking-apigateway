@@ -1,11 +1,6 @@
-<!-- BKUI-KNOWLEDGE-MANAGED -->
 ---
-id: eng-state-management
 name: pinia-setup
-category: engineering
 description: 基于 Pinia 的全局状态管理规范，包含 UserStore、AppStore 的标准定义
-tags: [pinia, store, state, vue3]
-updated_at: 2026-01-09
 ---
 
 # 全局状态管理规范 (Pinia)
