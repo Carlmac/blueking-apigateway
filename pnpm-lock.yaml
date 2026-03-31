@@ -110,9 +110,6 @@ importers:
       semver:
         specifier: ^7.7.2
         version: 7.7.2
-      symlink-dir:
-        specifier: ^10.0.1
-        version: 10.0.1
       tdesign-vue-next:
         specifier: ^1.18.0
         version: 1.18.0(vue@3.5.18(typescript@5.8.3))
@@ -231,6 +228,9 @@ importers:
       stylelint-order:
         specifier: ^7.0.0
         version: 7.0.0(stylelint@16.22.0(typescript@5.8.3))
+      symlink-dir:
+        specifier: ^10.0.1
+        version: 10.0.1
       typescript:
         specifier: ~5.8.3
         version: 5.8.3

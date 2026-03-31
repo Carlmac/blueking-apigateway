@@ -1,6 +1,5 @@
 import { symlinkDir } from 'symlink-dir';
 import fs from 'node:fs';
-import path from 'node:path';
 
 // 📌 定义源目录和目标软链接路径
 const source = './.agents';
@@ -18,7 +17,10 @@ async function main() {
 
       // 🗑️ 如果旧的备份已存在，先删除旧备份
       if (fs.existsSync(backup)) {
-        fs.rmSync(backup, { recursive: true, force: true });
+        fs.rmSync(backup, {
+          recursive: true,
+          force: true,
+        });
         console.log(`🧹 已清理旧的备份文件 ${backup}`);
       }
 
@@ -31,9 +33,10 @@ async function main() {
     console.log(`🔨 正在创建软链接：${source} → ${target} ...`);
     await symlinkDir(source, target);
     console.log('🎉 软链接创建成功！');
-  } catch (err) {
+  }
+  catch (err) {
     // ❌ 捕获并告知用户错误信息
-    console.error(`\n❌ 出错了！创建软链接时发生错误：`);
+    console.error('\n❌ 出错了！创建软链接时发生错误：');
     console.error(`💥 错误详情：${err.message}`);
     process.exit(1);
   }
